@@ -1,0 +1,13 @@
+{
+    "items": [
+      {
+        "itemId": 1,
+        "factoryId": 1,
+        "Price" : 1,
+        "quantity": 2,
+        "itemName":"Compass shoes",
+        "image": "https://ipfs.io/ipfs/QmTYEboq8raiBs7GTUg2yLXB3PMz6HuBNgNfSZBx5Msztg/camera.jpg"
+        
+      }
+    ]
+  }
