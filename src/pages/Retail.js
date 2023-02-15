@@ -29,7 +29,7 @@ const Distributor = ({ account,app, setApp }) => {
 
     const retIdBig = BigNumber.from(retailId);
     const itemIdBig = BigNumber.from(itemId);
-    
+    console.log(await contract.itemsHistory(0));
     try {
       await contract
         .retailToCustomer(itemIdBig, retIdBig)

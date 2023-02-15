@@ -28,26 +28,28 @@ const Store = ({ app, setApp }) => {
 
   async function loadItem() {
     const itemCount = await contract.itemCount();
+    console.log(itemCount);
     let items = [];
     for (let i = 1; i <= itemCount; i++) {
       const item = await contract.itemCreated(i);
       if (item.stage === 3) {
         items.push({
           itemId: item.itemId,
-          price: item.price,
+          price: item.Price,
           quantity: item.quantity,
           itemName: item.itemName,
           image: item.image,
         });
       }
     }
+    console.log(items)
     setItems(items);
     setLoading(false);
   }
 
   async function loadItemHistory() {
     const itemCount = await contract.itemCount();
-    const history = await contract.getItemHistory(itemCount);
+    const history = await contract.itemsHistory(itemCount-1);
     
     console.log(history);
     setItemHistory(history);

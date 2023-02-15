@@ -9,7 +9,7 @@ contract supplyChain is setLogistic {
 
     struct Item {
         uint itemId;
-        uint price;
+        uint Price;
         uint quantity;
         string itemName;
         string image;
@@ -35,14 +35,13 @@ contract supplyChain is setLogistic {
         uint lastOrder;
     }
 
-    uint public itemCount;
+    uint public itemCount = 1;
     mapping(uint => Item) public itemCreated;
     mapping(uint => itemHistory) public itemsHistory;
     
     
     function addItem (string memory _itemName, uint _factoryId, uint _quantity, uint _price, string memory _image) public {
-        require( _factoryId == factories[_factoryId].id && msg.sender == factories[_factoryId].addr , "Wrong Factory Id or address");
-        itemCount++;
+        require( _factoryId == factories[_factoryId].id, "Wrong Factory Id ");
 
         itemCreated[itemCount] = Item(itemCount, _price, _quantity, _itemName, _image, Stage.Factory);
         
@@ -53,12 +52,12 @@ contract supplyChain is setLogistic {
         itemsHistory[itemCount].factoryPlace = factories[_factoryId].place;
 
         itemsHistory[itemCount].timeMade = block.timestamp;
-        
-       
+
+        itemCount++;
     }
 
     function itemToDistributor(uint _itemId, uint _distributorId, uint _factoryId) public {
-        require( _factoryId == factories[_factoryId].id && msg.sender == factories[_factoryId].addr , "Wrong Factory Id or address");
+        require( _factoryId == factories[_factoryId].id, "Wrong Factory Id");
         require(itemCreated[_itemId].stage == Stage.Factory, "wrong stage");
         
         itemCreated[_itemId].stage = Stage.Distribution;
@@ -69,7 +68,7 @@ contract supplyChain is setLogistic {
 
 
     function itemToRetail(uint _itemId, uint _retailId, uint _distributorId) public {
-        require( _distributorId == distributors[_distributorId].id && msg.sender == distributors[_distributorId].addr , "Wrong Distributor Id or address");
+        require( _distributorId == distributors[_distributorId].id, "Wrong Distributor Id");
         require(itemCreated[_itemId].stage == Stage.Distribution, "wrong stage");
         
         itemCreated[_itemId].stage = Stage.Retail;
@@ -80,13 +79,12 @@ contract supplyChain is setLogistic {
     }
 
     function retailToCustomer(uint _itemId, uint _retailId) public {
-        require( _retailId == retails[_retailId].id && msg.sender == retails[_retailId].addr , "Wrong Retail Id or address");
+        require( _retailId == retails[_retailId].id, "Wrong Retail Id");
         Item memory item = itemCreated[_itemId];
-        require(item.quantity > 0);
+        require(item.quantity > 0, "Product Out Of Stock");
         itemCreated[_itemId].quantity = item.quantity-1;
         itemsHistory[_itemId].lastOrder = block.timestamp;        
     }
-
 
     function getItemHistory(uint _itemId) external view returns(itemHistory memory) {
         itemHistory memory history = itemsHistory[_itemId];

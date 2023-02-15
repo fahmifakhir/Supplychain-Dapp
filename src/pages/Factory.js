@@ -32,7 +32,7 @@ const Factory = ({ account, seAccount, setApp }) => {
     const factIdBig = BigNumber.from(factoryId);
     const priceBig = BigNumber.from(price);
     const quantityBig = BigNumber.from(quantity);
-
+    
     try {
       await contract
         .addItem(itemName, factoryId, quantity, price, image)

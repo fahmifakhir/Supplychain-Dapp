@@ -1,5 +1,4 @@
 const hre = require("hardhat");
-const { Item } = require("../src/data/items.json");
 const { factory } = require("../src/data/factoryData.json");
 const { distributor } = require("../src/data/distributorData.json");
 const { retail } = require("../src/data/retailData.json");
@@ -23,20 +22,18 @@ async function main() {
   //add list a default factory, distributor and retail
 
   for (let i = 0; i < factory.length; i++) {
-    const setFactory = await setlogistic
+    const setFactory = await supplychain
       .connect(deployer)
       .addFactory(
-        factory[i].addr, 
         factory[i].name, 
         factory[i].place
         );
     await setFactory.wait();
   }
   for (let i = 0; i < distributor.length; i++) {
-    const setDistributor = await setlogistic
+    const setDistributor = await supplychain
       .connect(deployer)
       .addDistribution(
-        distributor[i].addr,
         distributor[i].name,
         distributor[i].place
       );
@@ -44,16 +41,17 @@ async function main() {
 
   }
   for (let i = 0; i < retail.length; i++) {
-    const setRetail = await setlogistic
+    const setRetail = await supplychain
       .connect(deployer)
       .addRetail(
-        retail[i].addr, 
         retail[i].name, 
         retail[i].place
       );
     await setRetail.wait();
   }
-  console.log(retail)
+  console.log(await supplychain.getFactory(1));
+  console.log(await supplychain.getDistributor(1))
+  console.log(await supplychain.getRetail(1))
 }
 
 main().catch((error) => {
